@@ -3,9 +3,3 @@ variable "volume_size" {
   default     = 10
   type        = number
 }
-
-variable "instance_type" {
-  description = "The type of instance to start"
-  default     = "t3.micro"
-  type        = string
-}

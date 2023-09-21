@@ -4,7 +4,6 @@ yum update -y
 yum install -y httpd
 systemctl start httpd
 systemctl enable httpd
-# sudo yum update -y
 sudo yum install git -y
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 source ~/.bashrc
@@ -16,12 +15,4 @@ git clone https://github.com/KristianMeier/cvr-for-aws-september.git .
 npm i
 npm run build
 sudo cp -r build/* /var/www/html/
-
-
-
-
-
-
-# get react app, install it
-
 # sudo systemctl restart httpd
