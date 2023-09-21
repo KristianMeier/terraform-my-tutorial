@@ -13,3 +13,11 @@
 
 - Make git private and ssh. It's public now.
 - Brug Terraform CLoud
+
+# Structure
+
+-Organize by Functionality/Component:
+
+- networking.tf: Contains VPC, subnets, NAT gateways, etc.
+- compute.tf: Contains EC2 instances, autoscaling groups, etc.
+- storage.tf: Contains S3 buckets, EBS volumes, etc.
