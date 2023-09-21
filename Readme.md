@@ -1,4 +1,14 @@
-# Todo
+# install
 
-- Make git private and ssh
-- Build from the git, so I don't manually have to npm build locally
+- terraform init
+- terramform apply
+
+# run
+
+- terraform state show aws_instance.dev_node
+- copy public_ip
+- go to http://public_ip
+
+# Togo
+
+- Make git private and ssh. It's public now.

@@ -1,17 +1,25 @@
 #!/bin/bash
-# Use this for your user data (script from top to bottom)
-# install httpd (Linux 2 version)
 sudo yum update -y
 yum update -y
 yum install -y httpd
 systemctl start httpd
 systemctl enable httpd
-sudo yum update -y
+# sudo yum update -y
 sudo yum install git -y
-# The 2 lines beneath was to do the "manual copy" of the react app.
-cd /var/www/html
-sudo git clone https://github.com/KristianMeier/cvr-for-aws-september-static.git .
-#install node
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+source ~/.bashrc
+nvm install 16.0.0
+cd /home/ec2-user
+mkdir "React App"
+cd "React App"
+git clone https://github.com/KristianMeier/cvr-for-aws-september.git .
+npm i
+npm run build
+sudo cp -r build/* /var/www/html/
+
+
+
+
 
 
 # get react app, install it
