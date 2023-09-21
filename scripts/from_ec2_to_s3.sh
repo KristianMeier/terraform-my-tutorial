@@ -1,0 +1,1 @@
+aws s3 cp /home/ec2-user/myfile.txt s3://krille-unikt-navn-hihi/myfile_from_s3_to_ec2.txt

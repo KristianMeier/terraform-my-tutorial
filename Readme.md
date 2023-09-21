@@ -12,3 +12,4 @@
 # Togo
 
 - Make git private and ssh. It's public now.
+- Brug Terraform CLoud

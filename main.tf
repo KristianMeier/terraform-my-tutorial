@@ -71,28 +71,50 @@ resource "aws_key_pair" "mtc_auth" {
   public_key = file("~/.ssh/mtckey.pub")
 }
 
-resource "aws_s3_bucket" "my_bucket" {
-  bucket = "krille-unikt-navn-hihi" # Change this to a variable. Måske
+resource "aws_instance" "dev_node" {
+  ami                    = data.aws_ami.server_ami.id
+  instance_type          = "t3.micro"
+  key_name               = aws_key_pair.mtc_auth.key_name
+  vpc_security_group_ids = [aws_security_group.mtc_sg.id]
+  subnet_id              = aws_subnet.mtc_public_subnet.id
+  user_data              = file("scripts/userdata.sh")
+
+  iam_instance_profile = aws_iam_instance_profile.ec2_s3_access_profile.name
+
+  root_block_device {
+    volume_size = var.volume_size // 16 max for free tier
+  }
+
+  tags = {
+    Name = "dev-node"
+  }
 }
 
-resource "aws_iam_policy" "s3_read_policy" {
-  name        = "S3ReadPolicy"
-  description = "My policy that grants read access to a specific S3 bucket"
+resource "aws_s3_bucket" "my_bucket" {
+  bucket = "krille-unikt-navn-hihi" # Change this to a unique name or use a variable.
+}
+
+resource "aws_iam_policy" "s3_access_policy" {
+  name        = "S3AccessPolicy"
+  description = "My policy that grants read and write access to a specific S3 bucket"
 
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
       {
-        Effect   = "Allow",
-        Action   = "s3:GetObject",
+        Effect = "Allow",
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject"
+        ],
         Resource = "${aws_s3_bucket.my_bucket.arn}/*"
       }
     ]
   })
 }
 
-resource "aws_iam_role" "ec2_s3_read_role" {
-  name = "EC2S3ReadRole"
+resource "aws_iam_role" "ec2_s3_access_role" {
+  name = "EC2S3AccessRole"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -108,31 +130,14 @@ resource "aws_iam_role" "ec2_s3_read_role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "attach_s3_read_policy" {
-  policy_arn = aws_iam_policy.s3_read_policy.arn
-  role       = aws_iam_role.ec2_s3_read_role.name
+resource "aws_iam_role_policy_attachment" "attach_s3_access_policy" {
+  policy_arn = aws_iam_policy.s3_access_policy.arn
+  role       = aws_iam_role.ec2_s3_access_role.name
 }
 
-resource "aws_iam_instance_profile" "ec2_s3_read_profile" {
-  name = "EC2S3ReadProfile"
-  role = aws_iam_role.ec2_s3_read_role.name
+resource "aws_iam_instance_profile" "ec2_s3_access_profile" {
+  name = "EC2S3AccessProfile"
+  role = aws_iam_role.ec2_s3_access_role.name
 }
 
-resource "aws_instance" "dev_node" {
-  ami                    = data.aws_ami.server_ami.id
-  instance_type          = "t3.micro"
-  key_name               = aws_key_pair.mtc_auth.key_name
-  vpc_security_group_ids = [aws_security_group.mtc_sg.id]
-  subnet_id              = aws_subnet.mtc_public_subnet.id
-  user_data              = file("scripts/userdata.sh")
 
-  iam_instance_profile = aws_iam_instance_profile.ec2_s3_read_profile.name
-
-  root_block_device {
-    volume_size = var.volume_size // 16 max for free tier
-  }
-
-  tags = {
-    Name = "dev-node"
-  }
-}
