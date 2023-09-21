@@ -79,12 +79,12 @@ resource "aws_iam_policy" "s3_read_policy" {
   name        = "S3ReadPolicy"
   description = "My policy that grants read access to a specific S3 bucket"
 
-  policy = file("policies/s3_policy.tf.json")
+  policy = file("policies/s3_read_policy.txt")
 }
 
 resource "aws_iam_role" "ec2_s3_read_role" {
-  name = "EC2S3ReadRole"
-  assume_role_policy = file("policies/assume_role_policy.tf.json")
+  name               = "EC2S3ReadRole"
+  assume_role_policy = file("policies/assume_role_policy.txt")
 }
 
 resource "aws_iam_role_policy_attachment" "attach_s3_read_policy" {
