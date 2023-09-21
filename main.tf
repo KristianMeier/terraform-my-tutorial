@@ -73,7 +73,7 @@ resource "aws_key_pair" "mtc_auth" {
 
 resource "aws_instance" "dev_node" {
   ami                    = data.aws_ami.server_ami.id
-  instance_type          = "t3.micro"
+  instance_type          = var.instance_type
   key_name               = aws_key_pair.mtc_auth.key_name
   vpc_security_group_ids = [aws_security_group.mtc_sg.id]
   subnet_id              = aws_subnet.mtc_public_subnet.id

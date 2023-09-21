@@ -9,11 +9,11 @@ systemctl enable httpd
 sudo yum update -y
 sudo yum install git -y
 # The 2 lines beneath was to do the "manual copy" of the react app.
-#cd /var/www/html
-#sudo git clone https://github.com/KristianMeier/cvr-for-aws-september-static.git .
+cd /var/www/html
+sudo git clone https://github.com/KristianMeier/cvr-for-aws-september-static.git .
 #install node
 
 
 # get react app, install it
-cd
+
 # sudo systemctl restart httpd
